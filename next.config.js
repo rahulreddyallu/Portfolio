@@ -11,7 +11,7 @@ const repoName = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const nextConfig = {
   // GitHub Pages static export
-  output: isGitHubPages ? 'export' : undefined,
+  //output: isGitHubPages ? 'export' : undefined,
   basePath: isGitHubPages && isProd ? repoName : '',
   assetPrefix: isGitHubPages && isProd ? repoName : '',
   trailingSlash: isGitHubPages,
