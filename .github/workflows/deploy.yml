@@ -37,7 +37,7 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Fetch all history for better caching
 
@@ -149,7 +149,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🔍 Wait for Deployment
         run: sleep 30 # Wait for GitHub Pages to update
