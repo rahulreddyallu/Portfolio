@@ -1,0 +1,26 @@
+/* ============================================
+   LANDING PAGE STYLES
+   ============================================ */
+
+   .landing {
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  /* Smooth scroll container */
+  .landing::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      ellipse at top,
+      rgba(124, 58, 237, 0.1) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+    z-index: var(--z-background);
+  }
+  

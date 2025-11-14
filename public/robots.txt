@@ -1,0 +1,21 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow: /admin
+Disallow: /private
+Allow: /
+
+# Sitemap
+Sitemap: https://yourusername.github.io/portfolio/sitemap.xml
+
+# Crawl-delay (optional)
+Crawl-delay: 1
+
+# Common bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

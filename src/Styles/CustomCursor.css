@@ -1,0 +1,92 @@
+/* ============================================
+   CUSTOM CURSOR STYLES
+   ============================================ */
+
+   .custom-cursor,
+   .custom-cursor-dot {
+     position: fixed;
+     pointer-events: none;
+     z-index: var(--z-cursor);
+     transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                 opacity 0.15s ease;
+   }
+   
+   /* Main cursor circle */
+   .custom-cursor {
+     width: 40px;
+     height: 40px;
+     border: 2px solid var(--color-primary);
+     border-radius: 50%;
+     transform: translate(-50%, -50%);
+     opacity: 0.5;
+     transition: width 0.3s ease, height 0.3s ease,
+                 border-color 0.3s ease, opacity 0.3s ease;
+   }
+   
+   /* Inner dot */
+   .custom-cursor-dot {
+     width: 8px;
+     height: 8px;
+     background: var(--color-primary);
+     border-radius: 50%;
+     transform: translate(-50%, -50%);
+     opacity: 0.8;
+   }
+   
+   /* Hover state */
+   .custom-cursor.hovering {
+     width: 60px;
+     height: 60px;
+     border-color: var(--color-secondary);
+     opacity: 0.8;
+   }
+   
+   .custom-cursor-dot.hovering {
+     width: 12px;
+     height: 12px;
+     background: var(--color-secondary);
+   }
+   
+   /* Click state */
+   .custom-cursor.clicking {
+     width: 35px;
+     height: 35px;
+     border-color: var(--color-accent);
+   }
+   
+   .custom-cursor-dot.clicking {
+     width: 6px;
+     height: 6px;
+     background: var(--color-accent);
+   }
+   
+   /* Hide default cursor on hover over body */
+   body {
+     cursor: none;
+   }
+   
+   /* Show default cursor on interactive elements for accessibility */
+   a, button, input, textarea, select {
+     cursor: pointer !important;
+   }
+   
+   /* Hide custom cursor on touch devices */
+   @media (hover: none) and (pointer: coarse) {
+     .custom-cursor,
+     .custom-cursor-dot {
+       display: none;
+     }
+     
+     body {
+       cursor: auto;
+     }
+   }
+   
+   /* Hide custom cursor in print */
+   @media print {
+     .custom-cursor,
+     .custom-cursor-dot {
+       display: none;
+     }
+   }
+   

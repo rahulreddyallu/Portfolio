@@ -1,0 +1,185 @@
+# GitHub Actions Workflow for Automated Deployment
+# Deploys the React portfolio to GitHub Pages with CI/CD
+name: Deploy Premium Portfolio
+
+# Trigger conditions
+on:
+  # Deploy on push to main branch
+  push:
+    branches:
+      - main
+
+  # Allow manual deployment from Actions tab
+  workflow_dispatch:
+
+# Set permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Prevent concurrent deployments
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# Environment variables
+env:
+  NODE_VERSION: "18"
+  CI: false # Treat warnings as warnings, not errors
+
+jobs:
+  # Job 1: Build the application
+  build:
+    name: Build Portfolio
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for better caching
+
+      # Step 2: Setup Node.js
+      - name: 🔧 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      # Step 3: Cache dependencies for faster builds
+      - name: 📦 Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install dependencies
+      - name: 📚 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      # Step 5: Run linting (optional but recommended)
+      - name: 🔍 Lint Code
+        run: npm run lint --if-present || echo "No lint script found, skipping..."
+        continue-on-error: true
+
+      # Step 6: Run tests (optional)
+      - name: 🧪 Run Tests
+        run: npm test -- --passWithNoTests --coverage
+        continue-on-error: true
+
+      # Step 7: Build the production bundle
+      - name: 🏗️ Build Production Bundle
+        run: npm run build
+        env:
+          CI: false
+          GENERATE_SOURCEMAP: false
+          INLINE_RUNTIME_CHUNK: false
+
+      # Step 8: Optimize build (remove source maps, minify)
+      - name: ⚡ Optimize Build
+        run: |
+          # Remove source maps for production
+          find ./build -name "*.map" -type f -delete
+
+          # Display build size
+          echo "📊 Build Size Analysis:"
+          du -sh ./build
+          du -sh ./build/static/js
+          du -sh ./build/static/css
+
+      # Step 9: Generate build metadata
+      - name: 📋 Generate Build Info
+        run: |
+          echo "{
+            \"buildDate\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\",
+            \"commitHash\": \"${{ github.sha }}\",
+            \"commitMessage\": \"$(git log -1 --pretty=%B)\",
+            \"branch\": \"${{ github.ref_name }}\",
+            \"nodeVersion\": \"${{ env.NODE_VERSION }}\",
+            \"repository\": \"${{ github.repository }}\"
+          }" > ./build/build-info.json
+
+      # Step 10: Upload build artifact
+      - name: 📤 Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: ./build
+          retention-days: 1
+
+      # Step 11: Upload Pages artifact
+      - name: 📄 Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build
+
+  # Job 2: Deploy to GitHub Pages
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Deploy to GitHub Pages
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # Post deployment notification
+      - name: ✅ Deployment Success
+        run: |
+          echo "🎉 Deployment successful!"
+          echo "🌐 Site URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "📅 Deployed at: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+
+  # Job 3: Performance Audit (optional but recommended)
+  audit:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.event_name == 'push' # Only run on push, not manual dispatch
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Wait for Deployment
+        run: sleep 30 # Wait for GitHub Pages to update
+
+      - name: 🏃 Run Lighthouse Audit
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true
+
+      - name: 📊 Display Audit Results
+        run: echo "Lighthouse audit complete! Check the artifacts for detailed results."
+
+  # Job 4: Notify on Success/Failure (optional)
+  notify:
+    name: Send Notification
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    if: always()
+
+    steps:
+      - name: 📢 Build Status
+        run: |
+          if [ "${{ needs.build.result }}" == "success" ] && [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "✅ Build and deployment successful!"
+            echo "🌐 Portfolio is now live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          else
+            echo "❌ Build or deployment failed!"
+            exit 1
+          fi

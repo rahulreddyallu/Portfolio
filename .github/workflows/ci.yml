@@ -1,0 +1,104 @@
+# Continuous Integration Workflow
+# Runs on Pull Requests to ensure code quality
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "18"
+
+jobs:
+  # Lint and Format Check
+  lint:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔍 Run ESLint
+        run: npm run lint --if-present || echo "No lint script"
+        continue-on-error: true
+
+      - name: 💅 Check Formatting
+        run: |
+          if [ -f ".prettierrc" ]; then
+            npx prettier --check "src/**/*.{js,jsx,ts,tsx,css,scss}"
+          fi
+        continue-on-error: true
+
+  # Test Suite
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧪 Run Tests
+        run: npm test -- --passWithNoTests --coverage --watchAll=false
+
+      - name: 📊 Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+        continue-on-error: true
+
+  # Build Verification
+  build:
+    name: Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🏗️ Build
+        run: npm run build
+        env:
+          CI: false
+
+      - name: 📊 Bundle Size Check
+        run: |
+          echo "📦 Build completed successfully!"
+          du -sh ./build
+          echo "JavaScript Bundle Size:"
+          du -sh ./build/static/js
+          echo "CSS Bundle Size:"
+          du -sh ./build/static/css
