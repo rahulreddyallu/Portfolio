@@ -11,6 +11,7 @@
 ## ✨ Features
 
 ### 🎨 **Design & UX**
+
 - **Minimal & Sophisticated** — Formal design language inspired by top product companies
 - **Dark Mode** — Seamless theme switching with system preference detection
 - **Smooth Scroll** — Lenis-powered buttery smooth scrolling (respects `prefers-reduced-motion`)
@@ -19,6 +20,7 @@
 - **Accessibility** — WCAG AA compliant, Lighthouse 90+ scores
 
 ### ⚡ **Performance**
+
 - **Next.js 14 App Router** — Latest features, optimal code splitting
 - **Image Optimization** — Next/Image with AVIF/WebP, responsive loading
 - **Font Optimization** — Inter Variable font with system fallbacks
@@ -27,6 +29,7 @@
 - **Bundle Analysis** — Built-in analyzer for optimization
 
 ### 🛠️ **Technical Stack**
+
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS (JIT mode)
@@ -38,6 +41,7 @@
 - **Deployment:** Vercel
 
 ### 📄 **Pages & Features**
+
 - ✅ **Home** — Hero + Featured Projects
 - ✅ **About** — Experience Timeline + Skills + Education
 - ✅ **Resume** — Downloadable PDF + Structured Data
@@ -47,6 +51,7 @@
 - ✅ **SEO** — OpenGraph, meta tags, sitemap, robots.txt
 
 ### 🔒 **Production-Ready**
+
 - **Server-side validation** — Zod schemas
 - **Rate limiting** — IP-based throttling (in-memory, Redis-ready)
 - **Security headers** — CSP, HSTS, X-Frame-Options
@@ -59,8 +64,8 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18.18+ and npm 9+
 - Git
 
 ### Installation
-

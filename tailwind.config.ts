@@ -48,11 +48,23 @@ const config: Config = {
         mono: ['var(--font-mono)', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
       },
       fontSize: {
-        'display-2xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
-        'display-xl': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
+        'display-2xl': [
+          '4.5rem',
+          { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' },
+        ],
+        'display-xl': [
+          '3.75rem',
+          { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' },
+        ],
         'display-lg': ['3rem', { lineHeight: '1.2', letterSpacing: '-0.02em', fontWeight: '700' }],
-        'display-md': ['2.25rem', { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' }],
-        'display-sm': ['1.875rem', { lineHeight: '1.3', letterSpacing: '-0.01em', fontWeight: '600' }],
+        'display-md': [
+          '2.25rem',
+          { lineHeight: '1.25', letterSpacing: '-0.01em', fontWeight: '600' },
+        ],
+        'display-sm': [
+          '1.875rem',
+          { lineHeight: '1.3', letterSpacing: '-0.01em', fontWeight: '600' },
+        ],
       },
       spacing: {
         '18': '4.5rem',
@@ -73,7 +85,7 @@ const config: Config = {
         'scale-in': 'scaleIn 0.3s ease-out',
         'spin-slow': 'spin 8s linear infinite',
         'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
-        'shimmer': 'shimmer 2s linear infinite',
+        shimmer: 'shimmer 2s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -112,13 +124,14 @@ const config: Config = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'gradient-mesh': 'linear-gradient(135deg, rgba(14,165,164,0.06) 0%, transparent 50%, rgba(14,165,164,0.03) 100%)',
+        'gradient-mesh':
+          'linear-gradient(135deg, rgba(14,165,164,0.06) 0%, transparent 50%, rgba(14,165,164,0.03) 100%)',
       },
       boxShadow: {
-        'soft': '0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06)',
+        soft: '0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06)',
         'soft-lg': '0 10px 30px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04)',
         'soft-xl': '0 20px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06)',
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.08)',
+        glass: '0 8px 32px rgba(0, 0, 0, 0.08)',
         'glass-dark': '0 8px 32px rgba(0, 0, 0, 0.24)',
       },
       backdropBlur: {
@@ -130,9 +143,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  plugins: [require('@tailwindcss/typography')],
 };
 
 export default config;

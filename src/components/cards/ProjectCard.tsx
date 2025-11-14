@@ -51,9 +51,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <h3 className="heading-sm mb-2 group-hover:text-accent-600 dark:group-hover:text-accent-400">
           {project.title}
         </h3>
-        <p className="mb-4 flex-1 text-primary-600 dark:text-primary-400">
-          {project.description}
-        </p>
+        <p className="mb-4 flex-1 text-primary-600 dark:text-primary-400">{project.description}</p>
 
         {/* Tags */}
         <div className="mb-4 flex flex-wrap gap-2">

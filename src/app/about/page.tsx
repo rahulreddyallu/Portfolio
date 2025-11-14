@@ -30,18 +30,25 @@ export default function AboutPage() {
             </h1>
             <div className="space-y-4 text-lg text-primary-600 dark:text-primary-400">
               <p>
-                I'm a <strong className="font-semibold text-primary-900 dark:text-primary-50">Business Analyst</strong> specializing in SaaS integrations and
-                enterprise database migrations. I bridge the gap between technical implementation
-                and customer success, ensuring seamless platform adoption.
+                I'm a{' '}
+                <strong className="font-semibold text-primary-900 dark:text-primary-50">
+                  Business Analyst
+                </strong>{' '}
+                specializing in SaaS integrations and enterprise database migrations. I bridge the
+                gap between technical implementation and customer success, ensuring seamless
+                platform adoption.
               </p>
               <p>
-                With a background in <strong className="font-semibold">Civil Engineering</strong> and a passion for technology,
-                I've transitioned into the world of software and finance, where I combine analytical
-                thinking with technical execution.
+                With a background in <strong className="font-semibold">Civil Engineering</strong>{' '}
+                and a passion for technology, I've transitioned into the world of software and
+                finance, where I combine analytical thinking with technical execution.
               </p>
               <p>
-                Currently, I'm building <strong className="font-semibold">institutional-grade algorithmic trading systems</strong>,
-                applying the same rigor I learned in engineering to financial markets.
+                Currently, I'm building{' '}
+                <strong className="font-semibold">
+                  institutional-grade algorithmic trading systems
+                </strong>
+                , applying the same rigor I learned in engineering to financial markets.
               </p>
             </div>
 

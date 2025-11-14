@@ -17,9 +17,7 @@ export function ContactInfo() {
           <div className="flex items-start gap-3">
             <MailIcon className="mt-1 h-5 w-5 flex-shrink-0 text-accent-600 dark:text-accent-400" />
             <div>
-              <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">
-                Email
-              </p>
+              <p className="text-sm font-semibold text-primary-700 dark:text-primary-300">Email</p>
               <a
                 href="mailto:rahul@example.com"
                 className="text-primary-600 hover:text-accent-600 dark:text-primary-400 dark:hover:text-accent-400"

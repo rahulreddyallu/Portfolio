@@ -64,7 +64,9 @@ export function ExperienceTimeline() {
                     {exp.achievements.map((achievement, i) => (
                       <li key={i} className="flex items-start text-sm">
                         <span className="mr-2 mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent-500" />
-                        <span className="text-primary-600 dark:text-primary-400">{achievement}</span>
+                        <span className="text-primary-600 dark:text-primary-400">
+                          {achievement}
+                        </span>
                       </li>
                     ))}
                   </ul>
