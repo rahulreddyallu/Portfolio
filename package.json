@@ -4,7 +4,7 @@
   "private": true,
   "description": "Ultra-premium portfolio with 3D effects, glassmorphism, and advanced animations",
   "author": "Rahul Reddy Allu",
-  "homepage": "https://yourusername.github.io/portfolio",
+  "homepage": "https://rahulreddyallu.github.io/portfolio",
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
     "@react-three/drei": "^9.105.4",
