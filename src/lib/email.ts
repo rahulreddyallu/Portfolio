@@ -3,6 +3,7 @@
 // ============================================================================
 
 import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail'; // ✅ Changed from require to import
 
 interface EmailOptions {
   to: string;
@@ -15,7 +16,6 @@ interface EmailOptions {
 export async function sendEmail(options: EmailOptions): Promise<void> {
   // Option 1: SendGrid (preferred for production)
   if (process.env.SENDGRID_API_KEY) {
-    const sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     await sgMail.send({

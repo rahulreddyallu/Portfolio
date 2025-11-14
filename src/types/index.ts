@@ -30,14 +30,7 @@ export interface Project {
   outcomes?: string[];
 }
 
-export type ProjectCategory =
-  | 'fintech'
-  | 'saas'
-  | 'enterprise'
-  | 'web'
-  | 'data'
-  | 'ml'
-  | 'automation';
+export type ProjectCategory = string;
 
 export type ProjectStatus = 'completed' | 'in-progress' | 'live' | 'archived';
 

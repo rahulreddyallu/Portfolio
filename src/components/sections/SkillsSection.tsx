@@ -6,7 +6,7 @@
 
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { skills, getSkillsByCategory } from '@/content/skills';
+import { getSkillsByCategory } from '@/content/skills';
 import type { SkillCategory } from '@/types';
 
 const categories: { key: SkillCategory; label: string }[] = [
