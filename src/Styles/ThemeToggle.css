@@ -1,105 +1,31 @@
-/* ============================================
-   THEME TOGGLE STYLES
-   ============================================ */
+/* ThemeToggle.css */
 
-   .theme-toggle {
-    position: fixed;
-    top: calc(var(--spacing-xl) + 80px); /* Below navbar */
-    right: var(--spacing-xl);
-    width: 50px;
-    height: 50px;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    border-radius: 50%;
-    color: var(--text-primary);
-    cursor: pointer;
-    box-shadow: var(--glass-shadow);
-    transition: all var(--transition-normal);
-    z-index: var(--z-fixed);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  
-  .theme-toggle:hover {
-    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
-    border-color: var(--color-primary-light);
-  }
-  
-  .theme-toggle:active {
-    transform: scale(0.95);
-  }
-  
-  .theme-toggle svg {
-    width: 24px;
-    height: 24px;
-    color: var(--text-primary);
-    transition: color var(--transition-fast);
-  }
-  
-  /* Animated background glow */
-  .theme-toggle::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-      circle,
-      var(--color-primary-light) 0%,
-      transparent 70%
-    );
-    opacity: 0;
-    transform: translate(-50%, -50%);
-    transition: opacity var(--transition-normal);
-    z-index: -1;
-  }
-  
-  .theme-toggle:hover::before {
-    opacity: 0.2;
-  }
-  
-  /* Dark mode specific styles */
-  [data-theme='dark'] .theme-toggle {
-    background: rgba(30, 41, 59, 0.8);
-    border-color: rgba(148, 163, 184, 0.2);
-  }
-  
-  [data-theme='dark'] .theme-toggle:hover {
-    box-shadow: 0 8px 30px rgba(6, 182, 212, 0.3);
-    border-color: var(--color-secondary-light);
-  }
-  
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    .theme-toggle {
-      top: auto;
-      bottom: calc(var(--spacing-lg) + 70px); /* Above scroll-to-top */
-      right: var(--spacing-lg);
-      width: 45px;
-      height: 45px;
-    }
-    
-    .theme-toggle svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-  
-  /* Accessibility - focus state */
-  .theme-toggle:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 3px;
-  }
-  
-  /* Print - hide */
-  @media print {
-    .theme-toggle {
-      display: none;
-    }
-  }
-  
+button {
+  background-color: var(--color-gray-light, #e5e7eb);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  outline-offset: 2px;
+}
+
+button:hover,
+button:focus {
+  background-color: var(--color-primary);
+  outline: none;
+}
+
+button svg {
+  width: 24px;
+  height: 24px;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}

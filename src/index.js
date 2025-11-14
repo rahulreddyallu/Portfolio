@@ -1,152 +1,134 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { useEffect, useState, createContext, useContext } from "react";
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import Lenis from "@studio-freight/lenis";
 
-/**
- * Error Boundary Component for graceful error handling
- * Catches JavaScript errors anywhere in the component tree
- */
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
+import App from "./App";
+import "./index.css";
 
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI
-    return { hasError: true, error };
-  }
+// Dark Mode Context for theme toggling and system preference detection
+const ThemeContext = createContext();
 
-  componentDidCatch(error, errorInfo) {
-    // Log error details to console for debugging
-    console.error('Application Error:', error, errorInfo);
-    
-    // Optional: Send error to analytics or error tracking service
-    // Example: logErrorToService(error, errorInfo);
-  }
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("theme");
+      if (stored) return stored;
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return prefersDark ? "dark" : "light";
+    }
+    return "light";
+  });
 
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100vh',
-          padding: '2rem',
-          textAlign: 'center',
-          fontFamily: 'Inter, system-ui, sans-serif',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-        }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            padding: '3rem',
-            borderRadius: '20px',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-            maxWidth: '500px'
-          }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⚠️</div>
-            <h1 style={{ 
-              fontSize: '2rem', 
-              marginBottom: '1rem', 
-              color: '#2563eb',
-              fontWeight: '700'
-            }}>
-              Oops! Something went wrong
-            </h1>
-            <p style={{ 
-              color: '#64748b', 
-              marginBottom: '1.5rem',
-              lineHeight: '1.6'
-            }}>
-              We encountered an unexpected error. Don't worry, your data is safe.
-              Please refresh the page to continue.
-            </p>
-            <button 
-              onClick={() => window.location.reload()} 
-              style={{
-                padding: '0.875rem 2rem',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '50px',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: '600',
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-                transition: 'transform 0.2s ease',
-              }}
-              onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-              onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-            >
-              Refresh Page
-            </button>
-            {/* Show error details in development */}
-            {process.env.NODE_ENV === 'development' && this.state.error && (
-              <details style={{
-                marginTop: '2rem',
-                textAlign: 'left',
-                background: '#f1f5f9',
-                padding: '1rem',
-                borderRadius: '8px',
-                fontSize: '0.875rem',
-                color: '#475569'
-              }}>
-                <summary style={{ cursor: 'pointer', fontWeight: '600', marginBottom: '0.5rem' }}>
-                  Error Details (Development Only)
-                </summary>
-                <pre style={{ 
-                  overflow: 'auto', 
-                  fontSize: '0.75rem',
-                  margin: 0,
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word'
-                }}>
-                  {this.state.error.toString()}
-                </pre>
-              </details>
-            )}
-          </div>
-        </div>
-      );
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    } else {
+      root.classList.remove("dark");
+      root.classList.add("light");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useTheme = () => useContext(ThemeContext);
+
+// Lenis Smooth Scroll hook
+const useLenis = () => {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => t * (2 - t),
+      smoothWheel: true,
+      direction: "vertical",
+      gestureDirection: "vertical",
+      smoothTouch: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
 
-    return this.props.children;
-  }
-}
+    requestAnimationFrame(raf);
 
-// Create root element
-const root = ReactDOM.createRoot(document.getElementById('root'));
+    return () => lenis.destroy();
+  }, []);
+};
 
-// Render app with Error Boundary and Strict Mode
+// Page transition variants for Framer Motion - subtle refined animations
+const pageVariants = {
+  initial: { opacity: 0, y: 15, scale: 0.98 },
+  in: { opacity: 1, y: 0, scale: 1 },
+  out: { opacity: 0, y: -15, scale: 0.98 },
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "easeInOut",
+  duration: 0.5,
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/*"
+          element={
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+              style={{ height: "100%" }}
+            >
+              <App />
+            </motion.div>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
+const Root = () => {
+  useLenis();
+
+  return (
+    <ThemeProvider>
+      <Router>
+        <AnimatedRoutes />
+      </Router>
+    </ThemeProvider>
+  );
+};
+
+const rootElement = document.getElementById("root");
+const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
+    <Root />
   </React.StrictMode>
 );
-
-/**
- * Performance monitoring
- * Measures and reports Core Web Vitals
- * 
- * In production, you can send these metrics to an analytics endpoint:
- * reportWebVitals((metric) => {
- *   // Send to analytics
- *   console.log(metric);
- * });
- */
-reportWebVitals(console.log);
-
-// Optional: Register service worker for PWA functionality
-// if ('serviceWorker' in navigator) {
-//   window.addEventListener('load', () => {
-//     navigator.serviceWorker.register('/service-worker.js')
-//       .then(registration => console.log('SW registered:', registration))
-//       .catch(error => console.log('SW registration failed:', error));
-//   });
-// }

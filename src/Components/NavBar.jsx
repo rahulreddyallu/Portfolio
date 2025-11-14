@@ -1,281 +1,191 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import "../Styles/NavBar.css";
+import { useTheme } from "./index";
 
-const NAV_ITEMS = [
-  { name: "Work", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Contact", path: "/contact" },
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/work", label: "Work" },
+  { href: "/contact", label: "Contact" },
 ];
 
-const TITLES = ["Rahul's Work", "About Rahul", "Contact Rahul"];
-
-export default function NavBar() {
+const NavBar = () => {
+  const { theme, toggleTheme } = useTheme();
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [isScrolled, setScrolled] = useState(false);
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Update active index based on current route
   useEffect(() => {
-    const idx = NAV_ITEMS.findIndex((item) => item.path === location.pathname);
-    setActiveIdx(idx >= 0 ? idx : 0);
-    setMobileMenuOpen(false); // Close mobile menu on route change
+    setMenuOpen(false); // close menu on navigation change
   }, [location.pathname]);
 
-  // Update page title
+  // Detect scroll to add subtle shadow and background for nav
   useEffect(() => {
-    document.title = TITLES[activeIdx] || "Rahul Reddy Allu";
-  }, [activeIdx]);
-
-  // Handle scroll for navbar background and progress bar
-  useEffect(() => {
-    const onScroll = () => {
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-      const scrollHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const progress = (scrollTop / scrollHeight) * 100;
-
-      setScrolled(scrollTop > 50);
-      setScrollProgress(progress);
-    };
-
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isMobileMenuOpen]);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!isMobileMenuOpen);
+  // Nav link underline animation variants
+  const underlineVariants = {
+    hidden: { width: 0 },
+    visible: { width: "100%" },
   };
 
   return (
-    <>
-      <motion.nav
-        className={`navbar ${isScrolled ? "scrolled" : ""}`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      >
-        {/* Scroll progress bar */}
-        <motion.div
-          className="navbar__progress"
-          style={{ width: `${scrollProgress}%` }}
-          initial={{ width: 0 }}
-          transition={{ duration: 0.1 }}
-        />
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md transition-shadow duration-300 ${
+        scrolled ? "shadow-md bg-white/90 dark:bg-gray-900/80" : "bg-transparent"
+      }`}
+      aria-label="Primary Navigation"
+    >
+      <div className="container flex items-center justify-between h-16 px-4 md:px-8">
+        {/* Logo */}
+        <NavLink
+          to="/"
+          className="font-semibold text-xl text-primary dark:text-primary/90"
+          aria-label="Homepage"
+        >
+          Rahul Allu
+        </NavLink>
 
-        <div className="navbar__container container">
-          {/* Logo/Brand */}
-          <Link to="/" className="navbar__brand">
-            <motion.div
-              className="navbar__logo"
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="gradient-text">R</span>
-            </motion.div>
-            <div className="navbar__brand-text">
-              <h1>Rahul Reddy Allu</h1>
-              <p>Business Analyst & Developer</p>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <ul className="navbar__menu">
-            {NAV_ITEMS.map((item, idx) => (
-              <motion.li
-                key={item.path}
-                className="navbar__menu-item"
-                whileHover={{ y: -3 }}
-                transition={{ type: "spring", stiffness: 300 }}
+        {/* Desktop Links */}
+        <ul className="hidden md:flex space-x-8 font-medium text-base text-gray-800 dark:text-gray-200">
+          {links.map(({ href, label }) => (
+            <li key={href}>
+              <NavLink
+                to={href}
+                className="relative py-2 group"
+                end={href === "/"}
               >
-                <Link
-                  to={item.path}
-                  className={`navbar__link ${
-                    activeIdx === idx ? "active" : ""
-                  }`}
-                >
-                  {item.name}
-                  {activeIdx === idx && (
-                    <motion.div
-                      className="navbar__link-underline"
-                      layoutId="underline"
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30,
-                      }}
+                {({ isActive }) => (
+                  <>
+                    <span>{label}</span>
+                    <motion.span
+                      className="absolute left-0 bottom-0 h-0.5 bg-primary dark:bg-primary/90 rounded"
+                      initial="hidden"
+                      animate={isActive ? "visible" : "hidden"}
+                      variants={underlineVariants}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
                     />
-                  )}
-                </Link>
-              </motion.li>
-            ))}
-          </ul>
+                    <motion.span
+                      className="absolute left-0 bottom-0 h-0.5 bg-primary dark:bg-primary/90 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ width: "100%" }}
+                    />
+                  </>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
 
-          {/* CTA Button */}
-          <motion.div
-            className="navbar__cta"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          className="ml-4 p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary/80"
+          title="Toggle Dark/Light Mode"
+        >
+          {theme === "dark" ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 text-yellow-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 3v1m0 16v1m6.364-12.364l-.707.707M6.343 18.364l-.707.707m12.728 0l-.707-.707M6.343 5.636l-.707-.707M21 12h1M3 12H2m15 6a7 7 0 01-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 text-gray-900"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 3c.132 0 .263.008.39.02a9 9 0 118.59 8.59A7.5 7.5 0 0112 3z"
+              />
+            </svg>
+          )}
+        </button>
+
+        {/* Mobile Hamburger Menu Button */}
+        <button
+          onClick={() => setMenuOpen(!isMenuOpen)}
+          aria-expanded={isMenuOpen}
+          aria-label="Toggle Navigation Menu"
+          className="md:hidden ml-4 p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary/80"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-7 w-7 text-primary dark:text-primary/90"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            <Link to="/contact" className="navbar__cta-btn">
-              <span>Let's Talk</span>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M1 8h14M8 1l7 7-7 7"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-          </motion.div>
+            {isMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
+      </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className={`navbar__hamburger ${isMobileMenuOpen ? "open" : ""}`}
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="navbar__mobile-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={toggleMobileMenu}
-            />
-
-            {/* Mobile Menu */}
-            <motion.div
-              className="navbar__mobile-menu"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
-              <div className="navbar__mobile-header">
-                <h2>Menu</h2>
-                <button
-                  className="navbar__mobile-close"
-                  onClick={toggleMobileMenu}
-                  aria-label="Close menu"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M18 6L6 18M6 6l12 12"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <ul className="navbar__mobile-links">
-                {NAV_ITEMS.map((item, idx) => (
-                  <motion.li
-                    key={item.path}
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
+        {isMenuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="md:hidden bg-white dark:bg-gray-900 shadow-lg overflow-hidden"
+          >
+            <ul className="flex flex-col space-y-4 p-4 font-semibold text-lg text-gray-900 dark:text-gray-200">
+              {links.map(({ href, label }) => (
+                <li key={href}>
+                  <NavLink
+                    to={href}
+                    className={({ isActive }) =>
+                      `block py-2 px-4 rounded transition-colors ${
+                        isActive
+                          ? "bg-primary text-white dark:bg-primary/90"
+                          : "hover:bg-primary/10 dark:hover:bg-primary/20"
+                      }`
+                    }
+                    end={href === "/"}
                   >
-                    <Link
-                      to={item.path}
-                      className={activeIdx === idx ? "active" : ""}
-                      onClick={toggleMobileMenu}
-                    >
-                      <span className="navbar__mobile-link-number">
-                        0{idx + 1}
-                      </span>
-                      <span className="navbar__mobile-link-text">
-                        {item.name}
-                      </span>
-                    </Link>
-                  </motion.li>
-                ))}
-              </ul>
-
-              {/* Mobile Menu Footer */}
-              <motion.div
-                className="navbar__mobile-footer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                <p>Let's work together</p>
-                <a
-                  href="mailto:rahul@example.com"
-                  className="navbar__mobile-email"
-                >
-                  rahul@example.com
-                </a>
-                <div className="navbar__mobile-socials">
-                  <a
-                    href="https://github.com/yourusername"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/yourprofile"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                    </svg>
-                  </a>
-                </div>
-              </motion.div>
-            </motion.div>
-          </>
+                    {label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </nav>
   );
-}
+};
+
+export default NavBar;

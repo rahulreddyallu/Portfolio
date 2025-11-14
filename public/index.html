@@ -1,47 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#7c3aed" />
-  
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Rahul Reddy Allu - Business Analyst & Developer specializing in SaaS integrations, algorithmic trading, and FinTech solutions. Premium portfolio with cutting-edge web technologies." />
-  <meta name="keywords" content="Business Analyst, SaaS Integration, Algorithmic Trading, FinTech, React Developer, Portfolio" />
-  <meta name="author" content="Rahul Reddy Allu" />
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://yourusername.github.io/portfolio/" />
-  <meta property="og:title" content="Rahul Reddy Allu - Business Analyst & Developer" />
-  <meta property="og:description" content="Explore cutting-edge projects in SaaS integrations, algorithmic trading, and FinTech solutions." />
-  <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://yourusername.github.io/portfolio/" />
-  <meta property="twitter:title" content="Rahul Reddy Allu - Business Analyst & Developer" />
-  <meta property="twitter:description" content="Explore cutting-edge projects in SaaS integrations, algorithmic trading, and FinTech solutions." />
-  <meta property="twitter:image" content="%PUBLIC_URL%/og-image.png" />
-  
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <!-- Modern Font Stack -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  
-  <title>Rahul Reddy Allu - Premium Portfolio</title>
-</head>
-<body>
-  <noscript>You need to enable JavaScript to run this premium portfolio experience.</noscript>
-  <div id="root"></div>
-  
-  <!-- Cursor follower element -->
-  <div id="cursor-follower"></div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Rahul Reddy Allu | Business Analyst at Kyndryl | SaaS Integration Expert</title>
+    <meta name="title" content="Rahul Reddy Allu | Business Analyst at Kyndryl" />
+    <meta name="description" content="Senior Business Analyst specializing in SaaS integrations, enterprise data migration, and database management. Currently at Kyndryl, working with Fortune 500 clients." />
+    <meta name="keywords" content="Business Analyst, SaaS Integration, Data Migration, Kyndryl, Enterprise Solutions, Database Migration, ETL, API Integration, PostgreSQL, MySQL, Azure" />
+    <meta name="author" content="Rahul Reddy Allu" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rahulreddyallu.github.io/portfolio/" />
+    <meta property="og:title" content="Rahul Reddy Allu - Business Analyst at Kyndryl" />
+    <meta property="og:description" content="Senior Business Analyst specializing in SaaS integrations and enterprise data migration solutions" />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+    <meta property="og:site_name" content="Rahul Reddy Allu Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://rahulreddyallu.github.io/portfolio/" />
+    <meta property="twitter:title" content="Rahul Reddy Allu - Business Analyst" />
+    <meta property="twitter:description" content="Senior Business Analyst specializing in SaaS integrations and enterprise solutions" />
+    <meta property="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://rahulreddyallu.github.io/portfolio/" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Premium Fonts - Inter (Used by Apple, Linear, Stripe) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="%PUBLIC_URL%/Rahul_Reddy_Allu_Resume.pdf" as="document" />
+    
+    <!-- DNS Prefetch for External Services -->
+    <link rel="dns-prefetch" href="https://api.emailjs.com" />
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Rahul Reddy Allu",
+      "jobTitle": "Business Analyst",
+      "description": "Senior Business Analyst specializing in SaaS integrations and enterprise data migration",
+      "image": "https://rahulreddyallu.github.io/portfolio/profile.jpg",
+      "url": "https://rahulreddyallu.github.io/portfolio/",
+      "sameAs": [
+        "https://www.linkedin.com/in/rahulreddyallu/",
+        "https://github.com/rahulreddyallu"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Kyndryl",
+        "url": "https://www.kyndryl.com"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Andhra University",
+        "sameAs": "https://www.andhrauniversity.edu.in/"
+      },
+      "knowsAbout": [
+        "Business Analysis",
+        "SaaS Integration",
+        "Data Migration",
+        "Database Management",
+        "PostgreSQL",
+        "MySQL",
+        "Azure",
+        "API Integration",
+        "ETL Processes",
+        "Enterprise Solutions"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hyderabad",
+        "addressRegion": "Telangana",
+        "addressCountry": "IN"
+      }
+    }
+    </script>
+    
+    <!-- Performance Optimization -->
+    <link rel="prefetch" href="%PUBLIC_URL%/static/css/main.css" />
+    
+    <!-- Mobile Web App Capable -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Rahul Portfolio" />
+  </head>
+  <body>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: system-ui;">
+        <h1>JavaScript Required</h1>
+        <p>This premium portfolio requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    
+    <!-- Performance Monitoring -->
+    <script>
+      // Page Load Performance
+      window.addEventListener('load', () => {
+        const perfData = window.performance.timing;
+        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+        console.log('Page Load Time:', pageLoadTime + 'ms');
+      });
+    </script>
+  </body>
 </html>

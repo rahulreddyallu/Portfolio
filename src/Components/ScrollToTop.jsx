@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "../Styles/ScrollToTop.css";
 
 const ScrollToTop = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  // Show button when page is scrolled down
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.pageYOffset > 300) {
-        setIsVisible(true);
+        setVisible(true);
       } else {
-        setIsVisible(false);
+        setVisible(false);
       }
     };
 
     window.addEventListener("scroll", toggleVisibility, { passive: true });
-
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  // Scroll to top with smooth animation
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -28,36 +24,36 @@ const ScrollToTop = () => {
     });
   };
 
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20, pointerEvents: "none" },
+    visible: { opacity: 1, y: 0, pointerEvents: "auto" },
+  };
+
   return (
     <AnimatePresence>
-      {isVisible && (
+      {visible && (
         <motion.button
-          className="scroll-to-top no-print"
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          variants={buttonVariants}
           onClick={scrollToTop}
           aria-label="Scroll to top"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          whileHover={{ y: -5, scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 20,
-          }}
+          className="fixed bottom-8 right-8 z-50 rounded-full p-3 bg-primary hover:bg-accent text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-primary/60 transition-colors duration-300"
         >
           <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
             fill="none"
+            viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeWidth={2}
           >
-            <line x1="12" y1="19" x2="12" y2="5"></line>
-            <polyline points="5 12 12 5 19 12"></polyline>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 15l7-7 7 7"
+            />
           </svg>
         </motion.button>
       )}
