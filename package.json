@@ -22,7 +22,7 @@
     "react-scripts": "5.0.1",
     "react-three-fiber": "^6.0.13",
     "simplex-noise": "^4.0.1",
-    "three": "^0.163.0",
+    "three": "^0.181.1",
     "web-vitals": "^3.5.2"
   },
   "scripts": {
